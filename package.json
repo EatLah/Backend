@@ -1,0 +1,11 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend for EatLah",
+  "dependencies": {
+    "express": "^4.13.4",
+    "sqlite3": "^3.1.1"
+  },
+  "devDependencies": {},
+  "author": "Wang Zhipeng",
+}
