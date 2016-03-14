@@ -8,7 +8,7 @@ router.get('/', function(req, res) {
   res.send('restaurant');
 });
 
-router.get('/all_restaurants', restaurantController.getAllRestaurant);
+router.get('/restaurants', restaurantController.getAllRestaurant);
 router.get('/restaurant', restaurantController.getRestaurantByID);
 
 module.exports = router;

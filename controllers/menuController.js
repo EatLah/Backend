@@ -4,7 +4,9 @@ var db = new sqlite3.Database('schema/EatLah.db');
 
 exports.getMenuCategoriesByRestaurantID = function(req, res) {
 	var restaurantID = req.query.restaurantID;
-	db.all('SELECT * FROM MenuCategory WHERE restaurantID=' + restaurantID, function(err, rows) {
+
+	var query = 'SELECT * FROM MenuCategory WHERE restaurantID=' + restaurantID;
+	db.all(query, function(err, rows) {
 		res.send(rows);
 	});
 };
