@@ -13,11 +13,14 @@ var db = new sqlite3.Database('schema/EatLah.db');
 
 // require route
 var index = require('./routes/index');
-var order = require('./routes/order');
 var user = require('./routes/user');
 var restaurant = require('./routes/restaurant');
 var menu = require('./routes/menu');
 var item = require('./routes/item');
+
+var customOrder = require('./routes/customOrder');
+var orderItem = require('./routes/orderItem');
+var reservation = require('./routes/reservation');
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
@@ -36,9 +39,13 @@ app.use(require('./config/caching').removeNotModified);
 // route
 app.use('/', index);
 // app.use(require('./config/tokenauth').authenticate);
-app.use('/order', order);
 app.use('/user', user);
 app.use('/restaurant', restaurant);
 app.use('/menu', menu);
 app.use('/item', item);
+
+app.use('/customOrder', customOrder);
+app.use('/orderItem', orderItem);
+app.use('/reservation', reservation);
+
 app.use(require('./routes/error').errorHandler); // error handler
