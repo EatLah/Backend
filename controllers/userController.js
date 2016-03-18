@@ -12,27 +12,38 @@ exports.registerUser = function(req, res) {
 	user.userPassword = crypto.createHash('sha1').update(user.userPassword).digest('hex');
 
 	// Check if this user already exists
-
-	var query = 'INSERT INTO UserAccount VALUES(' + 'NULL' + ',\'' + 
-													user.userName + '\',\'' +
-													user.userPassword + '\',\'' +
-													user.firstName + '\',\'' +
-													user.lastName + '\',\'' +
-													user.userType + '\',\'' +
-													user.gender + '\',\'' +
-													user.contactNumber + '\',\'' +
-													user.emailAddress + '\')';
-	db.run(query, function(err) {
-		if (err) {
-			res.send(err);
+	db.all('SELECT * FROM UserAccount WHERE contactNumber=' + contactNumber, function(err, rows) {
+		if (rows.length > 0) {
+			res.send({
+				status: 'failed',
+				message: 'User already exists.'
+			});
 		} else {
-			user.userID = this.lastID;
-			var eatlahToken = token.generateToken(user);
+			var query = 'INSERT INTO UserAccount VALUES(' + 'NULL' + ',\'' + 
+															user.userName + '\',\'' +
+															user.userPassword + '\',\'' +
+															user.firstName + '\',\'' +
+															user.lastName + '\',\'' +
+															user.userType + '\',\'' +
+															user.gender + '\',\'' +
+															user.contactNumber + '\',\'' +
+															user.emailAddress + '\')';
+			db.run(query, function(err) {
+				if (err) {
+					res.send({
+						status: 'failed',
+						message: 'Try again later.'
+					});
+				} else {
+					user.userID = this.lastID;
+					var eatlahToken = token.generateToken(user);
 
-			res.status(200).send({
-				status: 'success',
-				eatlah_token: eatlahToken,
-				user: user
+					res.status(200).send({
+						status: 'success',
+						eatlah_token: eatlahToken,
+						user: user
+					});
+				}
 			});
 		}
 	});
