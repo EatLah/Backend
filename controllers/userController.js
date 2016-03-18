@@ -20,15 +20,14 @@ exports.requireAuthentication = function(req, res, next) {
 exports.registerUser = function(req, res) {
 	var user = req.body.user;
 	user.userPassword = crypto.createHash('sha1').update(user.userPassword).digest('hex');
-
 	// Check if this user already exists
-	db.all('SELECT * FROM UserAccount WHERE contactNumber=' + contactNumber, function(err, rows) {
+	db.all('SELECT * FROM UserAccount WHERE contactNumber=' + user.contactNumber, function(err, rows) {
 		if (err) {
 			res.send({
 				status: 'error',
 				message: 'Error occurs.'
 			});
-		} else if (rows) {
+		} else if (rows.length > 0) {
 			res.send({
 				status: 'failed',
 				message: 'User already exists.'
