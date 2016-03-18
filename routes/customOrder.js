@@ -9,6 +9,6 @@ router.get('/', function(req, res) {
   res.send('customOrder');
 });
 
-router.post('/create', userController.requireAuthentication, customOrderController.createCustomOrder);
+router.post('/create', customOrderController.createCustomOrder);
 
 module.exports = router;

@@ -4,33 +4,34 @@ var config = require('../config/config');
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database(config.db);
 
-exports.createCustomeOrder = function(req, res) {
-	var customeOrder = req.body.customeOrder;
+exports.createCustomOrder = function(req, res) {
+	var customOrder = req.body.customOrder;
 
-	var query = 'INSERT INTO CustomOrder VALUES(' + 'NULL' + ',\'' + 
-													customeOrder.restaurantID + '\',\'' +
-													customeOrder.reservationID + '\',\'' +
-													customeOrder.tableNumber + '\',\'' +
-													customeOrder.staffID + '\',\'' +
-													customeOrder.orderTimestamp + '\',\'' +
-													customeOrder.totalBill + '\',\'' +
-													customeOrder.orderStatus + '\',\'' +
-													customeOrder.orderType + '\')';
+	var query = 'INSERT INTO CustomerOrder VALUES(' + 'NULL' + ',\'' + 
+													customOrder.restaurantID + '\',\'' +
+													customOrder.reservationID + '\',\'' +
+													customOrder.tableNumber + '\',\'' +
+													customOrder.staffID + '\',\'' +
+													customOrder.orderTimestamp + '\',\'' +
+													customOrder.totalBill + '\',\'' +
+													customOrder.orderStatus + '\',\'' +
+													customOrder.orderType + '\')';
 
 	db.run(query, function(err) {
 		if (err) {
+			console.log(err);
 			return res.send({
 				status: 'failed',
 				message: 'Try again later.'
 			});
 		} else {
-			customeOrder.orderID = this.lastID;
+			customOrder.orderID = this.lastID;
 
 			return res.status(200).send({
 				status: 'success',
-				message: 'Create customeOrder successful.',
-				eatlah_token: eatlahToken,
-				eatlah_customeOrder: customeOrder
+				message: 'Create customOrder successful.',
+				// eatlah_token: eatlahToken,
+				eatlah_customOrder: customOrder
 			});
 		}
 	});

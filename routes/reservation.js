@@ -9,6 +9,6 @@ router.get('/', function(req, res) {
   res.send('reservation');
 });
 
-router.post('/create', userController.requireAuthentication, reservationController.createReservation);
+router.post('/create', reservationController.createReservation);
 
 module.exports = router;

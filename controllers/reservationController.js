@@ -18,6 +18,7 @@ exports.createReservation = function(req, res) {
 
 	db.run(query, function(err) {
 		if (err) {
+			console.log(err);
 			return res.send({
 				status: 'failed',
 				message: 'Try again later.'
@@ -28,7 +29,7 @@ exports.createReservation = function(req, res) {
 			return res.status(200).send({
 				status: 'success',
 				message: 'Create reservation successful.',
-				eatlah_token: eatlahToken,
+				// eatlah_token: eatlahToken,
 				eatlah_reservation: reservation
 			});
 		}
