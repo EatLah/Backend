@@ -1,6 +1,8 @@
 // db
+var config = require('config/config');
+
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('schema/EatLah.db');
+var db = new sqlite3.Database(config.db);
 
 exports.getAllRestaurant = function(req, res) {
 	var query = 'SELECT * FROM RestaurantAccount';

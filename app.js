@@ -6,10 +6,11 @@ var path = require('path');
 
 // app
 var app = express();
+var config = require('config/config');
 
 // db
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('schema/EatLah.db');
+var db = new sqlite3.Database(config.db);
 
 // require route
 var index = require('./routes/index');
