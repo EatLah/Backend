@@ -6,7 +6,7 @@ var path = require('path');
 
 // app
 var app = express();
-var config = require('config/config');
+var config = require('./config/config');
 
 // db
 var sqlite3 = require('sqlite3').verbose();
@@ -39,7 +39,7 @@ app.use(require('./config/caching').removeNotModified);
 
 // route
 app.use('/', index);
-// app.use(require('./config/tokenauth').authenticate);
+app.use(require('./config/auth').authenticate);
 app.use('/user', user);
 app.use('/restaurant', restaurant);
 app.use('/menu', menu);
