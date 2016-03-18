@@ -97,9 +97,8 @@ exports.loginUser = function(req, res) {
 
 exports.findUser = function(req, res) {
 	var contactNumber = req.query.contactNumber;
-
 	var query = 'SELECT * FROM UserAccount WHERE contactNumber=' + contactNumber;
 	db.all(query, function(err, rows) {
-		res.send(rows);
+		res.send(rows[0]);
 	});
 };
