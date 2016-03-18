@@ -3,12 +3,15 @@ var config = require('./config');
 
 exports.generateToken = function(user) {
   var unencryptedToken = {
-    email: user.email,
-    name: user.name,
-    phone: user.phone,
-    isDriver: user.isDriver,
-    creditCard: user.creditCard,
-    userid: user._id,
+    userID: user.userID,
+    userName: user.userName,
+    userPassword: user.userPassword,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    userType: user.userType,
+    gender: user.gender,
+    contactNumber: user.contactNumber,
+    emailAddress: user.emailAddress,
     expires: Date.now() + 604800000
   };
 
