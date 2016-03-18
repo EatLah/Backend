@@ -1,5 +1,11 @@
 var token = require('./token.js');
 
+//db
+var config = require('../config/config');
+
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database(config.db);
+
 exports.authenticate = function(req, res, next) {
   req.user = {};
   req.authentication = {
@@ -9,14 +15,13 @@ exports.authenticate = function(req, res, next) {
     req.authentication.message = 'no token provided';
     return next();
   }
-  var weloToken = req.query.welo_token;
-  if (weloToken) {
-    var decoded = token.decryptToken(weloToken);
+  var eatlahToken = req.query.eatlah_token;
+  if (eatlahToken) {
+    var decoded = token.decryptToken(eatlahToken);
     if (decoded.expires > Date.now()) {
-      User.findOne({
-        _id: decoded.userid
-      }, function(err, user) {
-        if (user) {
+      var query = 'SELECT * FROM UserAccount WHERE userID=' + decoded.userID;
+      db.all(query, function(err, rows) {
+        if (rows) {
           req.authentication.isAuthenticated = true;
           req.user = user;
         } else {
@@ -24,6 +29,7 @@ exports.authenticate = function(req, res, next) {
         }
         return next();
       });
+
     } else {
       req.authentication.message = 'token expired';
       return next();

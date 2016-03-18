@@ -7,13 +7,28 @@ var db = new sqlite3.Database(config.db);
 
 var crypto = require('crypto');
 
+exports.requireAuthentication = function(req, res, next) {
+  if (req.authentication.isAuthenticated) {
+    return next();
+  } else {
+    return res.status(403).send({
+      error: req.authentication.message
+    });
+  }
+};
+
 exports.registerUser = function(req, res) {
 	var user = req.body.user;
 	user.userPassword = crypto.createHash('sha1').update(user.userPassword).digest('hex');
 
 	// Check if this user already exists
 	db.all('SELECT * FROM UserAccount WHERE contactNumber=' + contactNumber, function(err, rows) {
-		if (rows.length > 0) {
+		if (err) {
+			res.send({
+				status: 'error',
+				message: 'Error occurs.'
+			});
+		} else if (rows) {
 			res.send({
 				status: 'failed',
 				message: 'User already exists.'
@@ -40,6 +55,7 @@ exports.registerUser = function(req, res) {
 
 					res.status(200).send({
 						status: 'success',
+						message: 'Register successful.',
 						eatlah_token: eatlahToken,
 						user: user
 					});
@@ -50,7 +66,33 @@ exports.registerUser = function(req, res) {
 };
 
 exports.loginUser = function(req, res) {
-	
+	var contactNumber = req.body.contactNumber;
+	var userPassword = crypto.createHash('sha1').update(req.body.userPassword).digest('hex');
+
+	var query = 'SELECT * FROM UserAccount WHERE contactNumber=' + contactNumber + ' AND userPassword=' + userPassword;
+	db.all(query, function(err, rows) {
+		if (err) {
+			res.send({
+				status: 'error',
+				message: 'Error occurs.'
+			});
+		} else if (!rows) {
+			res.send({
+				status: 'failed',
+				message: 'Wrong mobile number or password.'
+			});
+		} else if (rows) {
+			var user = rows[0];
+			var eatlahToken = token.generateToken(user);
+
+			res.status(200).send({
+        		status: 'success',
+        		message: 'Login successful.',
+        		eatlah_token: eatlahToken,
+        		user: user
+        	});
+		}
+	});
 };
 
 exports.findUser = function(req, res) {
