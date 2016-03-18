@@ -19,16 +19,17 @@ exports.requireAuthentication = function(req, res, next) {
 
 exports.registerUser = function(req, res) {
 	var user = req.body.user;
+	console.log(user);
 	user.userPassword = crypto.createHash('sha1').update(user.userPassword).digest('hex');
 	// Check if this user already exists
 	db.all('SELECT * FROM UserAccount WHERE contactNumber=' + user.contactNumber, function(err, rows) {
 		if (err) {
-			res.send({
+			return res.send({
 				status: 'error',
 				message: 'Error occurs.'
 			});
 		} else if (rows.length > 0) {
-			res.send({
+			return res.send({
 				status: 'failed',
 				message: 'User already exists.'
 			});
@@ -44,7 +45,7 @@ exports.registerUser = function(req, res) {
 															user.emailAddress + '\')';
 			db.run(query, function(err) {
 				if (err) {
-					res.send({
+					return res.send({
 						status: 'failed',
 						message: 'Try again later.'
 					});
@@ -52,11 +53,11 @@ exports.registerUser = function(req, res) {
 					user.userID = this.lastID;
 					var eatlahToken = token.generateToken(user);
 
-					res.status(200).send({
+					return res.status(200).send({
 						status: 'success',
 						message: 'Register successful.',
 						eatlah_token: eatlahToken,
-						user: user
+						eatlah_user: user
 					});
 				}
 			});
@@ -71,12 +72,12 @@ exports.loginUser = function(req, res) {
 	var query = 'SELECT * FROM UserAccount WHERE contactNumber=' + contactNumber + ' AND userPassword=\'' + userPassword + '\'';
 	db.all(query, function(err, rows) {
 		if (err) {
-			res.send({
+			return res.send({
 				status: 'error',
-				message: 'Error occurs.' + err
+				message: 'Error occurs.'
 			});
 		} else if (rows.length == 0) {
-			res.send({
+			return res.send({
 				status: 'failed',
 				message: 'Wrong mobile number or password.'
 			});
@@ -84,11 +85,11 @@ exports.loginUser = function(req, res) {
 			var user = rows[0];
 			var eatlahToken = token.generateToken(user);
 
-			res.status(200).send({
+			return res.status(200).send({
         		status: 'success',
         		message: 'Login successful.',
         		eatlah_token: eatlahToken,
-        		user: user
+        		eatlah_user: user
         	});
 		}
 	});
