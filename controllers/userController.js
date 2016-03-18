@@ -68,19 +68,19 @@ exports.loginUser = function(req, res) {
 	var contactNumber = req.body.contactNumber;
 	var userPassword = crypto.createHash('sha1').update(req.body.userPassword).digest('hex');
 
-	var query = 'SELECT * FROM UserAccount WHERE contactNumber=' + contactNumber + ' AND userPassword=' + userPassword;
+	var query = 'SELECT * FROM UserAccount WHERE contactNumber=' + contactNumber + ' AND userPassword=\'' + userPassword + '\'';
 	db.all(query, function(err, rows) {
 		if (err) {
 			res.send({
 				status: 'error',
-				message: 'Error occurs.'
+				message: 'Error occurs.' + err
 			});
-		} else if (!rows) {
+		} else if (rows.length == 0) {
 			res.send({
 				status: 'failed',
 				message: 'Wrong mobile number or password.'
 			});
-		} else if (rows) {
+		} else if (rows.length > 0) {
 			var user = rows[0];
 			var eatlahToken = token.generateToken(user);
 
