@@ -44,3 +44,23 @@ exports.getReservations = function(req, res) {
 		res.send(rows);
 	});
 };
+
+exports.deleteReservation = function(req, res) {
+	var reservationID = req.query.reservationID;
+
+	var query = 'DELETE FROM Reservation WHERE reservationID=' + reservationID;
+	db.run(query, function(err) {
+		if (err) {
+			console.log(err);
+			return res.send({
+				status: 'failed',
+				message: 'Try again later.'
+			});
+		} else {
+			return res.status(200).send({
+				status: 'success',
+				message: 'Delete reservation successful.'
+			});
+		}
+	});
+};

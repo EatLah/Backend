@@ -11,5 +11,6 @@ router.get('/', function(req, res) {
 
 router.post('/create', reservationController.createReservation);
 router.get('/reservations', reservationController.getReservations);
+router.delete('/delete', reservationController.deleteReservation);
 
 module.exports = router;
