@@ -10,5 +10,6 @@ router.get('/', function(req, res) {
 });
 
 router.post('/create', reservationController.createReservation);
+router.get('/reservations', reservationController.getReservations);
 
 module.exports = router;

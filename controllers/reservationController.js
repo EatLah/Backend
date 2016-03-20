@@ -35,3 +35,12 @@ exports.createReservation = function(req, res) {
 		}
 	});
 };
+
+exports.getReservations = function(req, res) {
+	var customerID = req.query.customerID;
+
+	var query = 'SELECT * FROM Reservation WHERE customerID=' + customerID;
+	db.all(query, function(err, rows) {
+		res.send(rows);
+	});
+};
