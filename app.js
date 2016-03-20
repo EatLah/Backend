@@ -22,6 +22,7 @@ var item = require('./routes/item');
 var customOrder = require('./routes/customOrder');
 var orderItem = require('./routes/orderItem');
 var reservation = require('./routes/reservation');
+var credit = require('./routes/credit');
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
@@ -48,5 +49,6 @@ app.use('/item', item);
 app.use('/customOrder', customOrder);
 app.use('/orderItem', orderItem);
 app.use('/reservation', reservation);
+app.use('/credit', credit);
 
 app.use(require('./routes/error').errorHandler); // error handler
